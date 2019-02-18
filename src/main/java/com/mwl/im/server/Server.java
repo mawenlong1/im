@@ -38,7 +38,8 @@ public class Server {
          .childHandler(new ChannelInitializer<NioSocketChannel>() {
              @Override
              protected void initChannel(NioSocketChannel ch) throws Exception {
-
+                 ch.pipeline()
+                   .addLast(new LoginServerHandler());
              }
          });
         bind(b, port);

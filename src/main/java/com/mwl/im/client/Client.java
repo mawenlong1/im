@@ -33,7 +33,8 @@ public class Client {
          .handler(new ChannelInitializer<SocketChannel>() {
              @Override
              protected void initChannel(SocketChannel ch) throws Exception {
-
+                 ch.pipeline()
+                   .addLast(new LoginClientHandler());
              }
          });
         connect(b, host, port, MAX_RETRY);
