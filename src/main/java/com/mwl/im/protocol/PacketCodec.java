@@ -42,7 +42,7 @@ public class PacketCodec {
      * @return
      */
     public ByteBuf encode(ByteBufAllocator allocator, Packet packet) {
-        //buffer与ioBuffer区别
+        // TODO buffer与ioBuffer区别
         ByteBuf byteBuf = allocator.buffer();
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
