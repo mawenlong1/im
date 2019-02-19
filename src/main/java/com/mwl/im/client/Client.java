@@ -4,8 +4,10 @@ import com.mwl.im.client.handler.LoginReponseHandler;
 import com.mwl.im.client.handler.MessageResponseHandler;
 import com.mwl.im.codec.PacketDecoder;
 import com.mwl.im.codec.PacketEncoder;
+import com.mwl.im.codec.Spliter;
+import com.mwl.im.protocol.request.LoginRequestPacket;
 import com.mwl.im.protocol.request.MessageRequestPacket;
-import com.mwl.im.utils.LoginUtil;
+import com.mwl.im.utils.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -48,6 +50,7 @@ public class Client {
              @Override
              protected void initChannel(SocketChannel ch) throws Exception {
                  ch.pipeline()
+                   .addLast(new Spliter())
                    .addLast(new PacketDecoder())
                    .addLast(new LoginReponseHandler())
                    .addLast(new MessageResponseHandler())
@@ -78,19 +81,38 @@ public class Client {
     }
 
     private static void startConsoleThread(Channel channel) {
+        Scanner sc = new Scanner(System.in);
+        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+
         new Thread(() -> {
             while (!Thread.interrupted()) {
-                if (LoginUtil.hasLogin(channel)) {
-                    System.out.println("输入要发送给服务器端的消息：");
-                    Scanner sc = new Scanner(System.in);
-                    String line = sc.nextLine();
+                if (!SessionUtil.hasLogin(channel)) {
+                    System.out.print("输入用户名登录: ");
+                    String username = sc.nextLine();
+                    loginRequestPacket.setUserName(username);
 
-                    MessageRequestPacket requestPacket = new MessageRequestPacket();
-                    requestPacket.setMessage(line);
-                    channel.writeAndFlush(requestPacket);
+                    // 密码使用默认的
+                    loginRequestPacket.setPassword("pwd");
+
+                    // 发送登录数据包
+                    channel.writeAndFlush(loginRequestPacket);
+                    waitForLoginResponse();
+                } else {
+                    System.out.print("输入发送人的userId: ");
+                    String toUserId = sc.next();
+                    System.out.print("输入要发送的消息: ");
+                    String message = sc.next();
+                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
                 }
             }
         }).start();
+    }
+
+    private static void waitForLoginResponse() {
+        try {
+            TimeUnit.MILLISECONDS.sleep(1000);
+        } catch (InterruptedException ignored) {
+        }
     }
 
     public static void main(String[] args) {

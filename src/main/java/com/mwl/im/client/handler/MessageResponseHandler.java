@@ -3,7 +3,6 @@ package com.mwl.im.client.handler;
 import com.mwl.im.protocol.response.MessageResponsePacket;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author mawenlong
@@ -13,6 +12,9 @@ public class MessageResponseHandler extends SimpleChannelInboundHandler<MessageR
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageResponsePacket msg) throws Exception {
-        System.out.println("收到服务器的消息：" + msg.getMessage());
+        String fromUserId = msg.getFromUserId();
+        String fromUserName = msg.getFromUserName();
+        System.out.println();
+        System.out.println("接受到消息："+fromUserId + ":" + fromUserName + " -> " + msg.getMessage());
     }
 }

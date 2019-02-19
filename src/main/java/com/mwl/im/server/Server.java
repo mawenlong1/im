@@ -2,6 +2,7 @@ package com.mwl.im.server;
 
 import com.mwl.im.codec.PacketDecoder;
 import com.mwl.im.codec.PacketEncoder;
+import com.mwl.im.server.handler.AuthHandler;
 import com.mwl.im.server.handler.LoginRequestHandler;
 import com.mwl.im.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -45,6 +46,8 @@ public class Server {
                  ch.pipeline()
                    .addLast(new PacketDecoder())
                    .addLast(new LoginRequestHandler())
+                   //添加用户认证
+                   .addLast(new AuthHandler())
                    .addLast(new MessageRequestHandler())
                    .addLast(new PacketEncoder());
              }

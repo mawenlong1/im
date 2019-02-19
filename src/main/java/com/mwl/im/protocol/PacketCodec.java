@@ -18,7 +18,7 @@ import java.util.Map;
  * @date 2019-02-18 22:30
  */
 public class PacketCodec {
-    private static final int MAGIX_NUMBER = 0x12345678;
+    public static final int MAGIC_NUMBER = 0x12345678;
     public static final PacketCodec INSTANCE = new PacketCodec();
 
     private final Map<Byte, Class<? extends Packet>> packetTypeMap;
@@ -50,7 +50,7 @@ public class PacketCodec {
 //        ByteBuf byteBuf = allocator.buffer();
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
-        byteBuf.writeInt(MAGIX_NUMBER);
+        byteBuf.writeInt(MAGIC_NUMBER);
         byteBuf.writeByte(packet.getVersion());
         byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlogrithm());
         byteBuf.writeByte(packet.getCommand());

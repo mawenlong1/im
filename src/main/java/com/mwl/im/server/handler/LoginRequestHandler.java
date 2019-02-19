@@ -1,12 +1,14 @@
 package com.mwl.im.server.handler;
 
-import com.mwl.im.protocol.PacketCodec;
 import com.mwl.im.protocol.request.LoginRequestPacket;
 import com.mwl.im.protocol.response.LoginResponsePacket;
-import io.netty.buffer.ByteBuf;
+import com.mwl.im.session.Session;
+import com.mwl.im.utils.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.UUID;
 
 /**
  * @author mawenlong
@@ -17,26 +19,38 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket msg) throws Exception {
-        log.info("=======开始处理客户端登录请求=====");
         LoginResponsePacket responsePacket = new LoginResponsePacket();
         responsePacket.setVersion(msg.getVersion());
-        if (valid(msg)) {
+        responsePacket.setUserName(msg.getUserName());
+
+        if (valid(ctx, msg)) {
             responsePacket.setSuccess(true);
-            log.info(msg.getUsername() + "---->登录成功！！！！");
+//            String userId = rendomUserId();
+            String userId = msg.getUserName();
+            responsePacket.setUserId(userId);
+            SessionUtil.bindSession(new Session(userId, msg.getUserName()), ctx.channel());
+            log.info("[" + msg.getUserName() + "]登录成功");
+            ctx.pipeline().remove(this);
         } else {
             responsePacket.setSuccess(false);
             responsePacket.setReason("账户校验失败。。。");
-            log.info(msg.getUsername() + "--->登录失败！！！！！！");
+            log.info(msg.getUserName() + "--->登录失败！！！！！！");
 
         }
         ctx.channel().writeAndFlush(responsePacket);
     }
 
-    private boolean valid(LoginRequestPacket requestPacket) {
-        if ("张三".equals(requestPacket.getUsername())) {
-            return true;
-        } else {
-            return false;
-        }
+    private String rendomUserId() {
+        return UUID.randomUUID().toString().split("-")[0];
+    }
+
+
+    private boolean valid(ChannelHandlerContext ctx, LoginRequestPacket requestPacket) {
+        return true;
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        SessionUtil.unBindSession(ctx.channel());
     }
 }

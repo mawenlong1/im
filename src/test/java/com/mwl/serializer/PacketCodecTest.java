@@ -11,8 +11,6 @@ import io.netty.buffer.ByteBufAllocator;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.UUID;
-
 /**
  * @author mawenlong
  * @date 2019-02-18 23:37
@@ -25,15 +23,14 @@ public class PacketCodecTest {
         LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
 
         loginRequestPacket.setVersion(((byte) 1));
-        loginRequestPacket.setUserId(UUID.randomUUID().toString());
-        loginRequestPacket.setUsername("zhangsan");
+        loginRequestPacket.setUserName("zhangsan");
         loginRequestPacket.setPassword("password");
 
         PacketCodec packetCodec = PacketCodec.INSTANCE;
         ByteBuf byteBuf = packetCodec.encode(ByteBufAllocator.DEFAULT.ioBuffer(), loginRequestPacket);
         Packet decodedPacket = packetCodec.decode(byteBuf);
 
-        System.out.println(((LoginRequestPacket) decodedPacket).getUsername());
+        System.out.println(((LoginRequestPacket) decodedPacket).getUserName());
         Assert.assertArrayEquals(serializer.serialize(loginRequestPacket), serializer.serialize(decodedPacket));
 
     }
