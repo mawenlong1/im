@@ -1,10 +1,12 @@
 package com.mwl.im.client;
 
-import com.mwl.im.protocol.PacketCodec;
+import com.mwl.im.client.handler.LoginReponseHandler;
+import com.mwl.im.client.handler.MessageResponseHandler;
+import com.mwl.im.codec.PacketDecoder;
+import com.mwl.im.codec.PacketEncoder;
 import com.mwl.im.protocol.request.MessageRequestPacket;
 import com.mwl.im.utils.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -46,7 +48,10 @@ public class Client {
              @Override
              protected void initChannel(SocketChannel ch) throws Exception {
                  ch.pipeline()
-                   .addLast(new LoginClientHandler());
+                   .addLast(new PacketDecoder())
+                   .addLast(new LoginReponseHandler())
+                   .addLast(new MessageResponseHandler())
+                   .addLast(new PacketEncoder());
              }
          });
         connect(b, host, port, MAX_RETRY);
@@ -82,8 +87,7 @@ public class Client {
 
                     MessageRequestPacket requestPacket = new MessageRequestPacket();
                     requestPacket.setMessage(line);
-                    ByteBuf byteBuf = PacketCodec.INSTANCE.encode(channel.alloc(), requestPacket);
-                    channel.writeAndFlush(byteBuf);
+                    channel.writeAndFlush(requestPacket);
                 }
             }
         }).start();

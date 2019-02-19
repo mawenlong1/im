@@ -9,7 +9,6 @@ import com.mwl.im.serialize.Serializer;
 import com.mwl.im.serialize.SerializerAlgorithm;
 import com.mwl.im.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,14 +40,14 @@ public class PacketCodec {
     /**
      * 编码
      *
-     * @param allocator
+     * @param byteBuf
      * @param packet
      *
      * @return
      */
-    public ByteBuf encode(ByteBufAllocator allocator, Packet packet) {
+    public ByteBuf encode(ByteBuf byteBuf, Packet packet) {
         // TODO buffer与ioBuffer区别
-        ByteBuf byteBuf = allocator.buffer();
+//        ByteBuf byteBuf = allocator.buffer();
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
         byteBuf.writeInt(MAGIX_NUMBER);

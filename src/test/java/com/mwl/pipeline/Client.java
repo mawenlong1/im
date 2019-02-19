@@ -1,6 +1,5 @@
 package com.mwl.pipeline;
 
-import com.mwl.im.client.LoginClientHandler;
 import com.mwl.pipeline.handler.ClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;

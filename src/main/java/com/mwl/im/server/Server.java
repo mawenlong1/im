@@ -1,5 +1,9 @@
 package com.mwl.im.server;
 
+import com.mwl.im.codec.PacketDecoder;
+import com.mwl.im.codec.PacketEncoder;
+import com.mwl.im.server.handler.LoginRequestHandler;
+import com.mwl.im.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -39,7 +43,10 @@ public class Server {
              @Override
              protected void initChannel(NioSocketChannel ch) throws Exception {
                  ch.pipeline()
-                   .addLast(new LoginServerHandler());
+                   .addLast(new PacketDecoder())
+                   .addLast(new LoginRequestHandler())
+                   .addLast(new MessageRequestHandler())
+                   .addLast(new PacketEncoder());
              }
          });
         bind(b, port);
