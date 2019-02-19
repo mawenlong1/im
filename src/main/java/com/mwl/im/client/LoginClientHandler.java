@@ -4,6 +4,8 @@ import com.mwl.im.protocol.Packet;
 import com.mwl.im.protocol.PacketCodec;
 import com.mwl.im.protocol.request.LoginRequestPacket;
 import com.mwl.im.protocol.response.LoginResponsePacket;
+import com.mwl.im.protocol.response.MessageResponsePacket;
+import com.mwl.im.utils.LoginUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -35,12 +37,18 @@ public class LoginClientHandler extends ChannelInboundHandlerAdapter {
         ByteBuf byteBuf = (ByteBuf) msg;
         Packet packet = PacketCodec.INSTANCE.decode(byteBuf);
         if (packet instanceof LoginResponsePacket) {
+            //登录
             LoginResponsePacket responsePacket = (LoginResponsePacket) packet;
             if (responsePacket.isSuccess()) {
+                LoginUtil.markAsLogin(ctx.channel());
                 log.info("登录成功！！！！！");
             } else {
                 log.info("登录失败！！！ 原因：" + responsePacket.getReason());
             }
+        } else if (packet instanceof MessageResponsePacket) {
+            //接受消息
+            MessageResponsePacket responsePacket = (MessageResponsePacket) packet;
+            log.info("收到服务器的消息：" + responsePacket.getMessage());
         }
     }
 }

@@ -1,6 +1,12 @@
 package com.mwl.im.client;
 
+import com.mwl.im.protocol.PacketCodec;
+import com.mwl.im.protocol.request.MessageRequestPacket;
+import com.mwl.im.utils.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -10,6 +16,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -49,6 +56,8 @@ public class Client {
         bootstrap.connect(host, port).addListener(future -> {
             if (future.isSuccess()) {
                 log.info("连接成功!");
+                Channel channel = ((ChannelFuture) future).channel();
+                startConsoleThread(channel);
             } else if (retry == 0) {
                 log.info("重试次数已用完，放弃连接！");
             } else {
@@ -61,6 +70,23 @@ public class Client {
                                    TimeUnit.SECONDS);
             }
         });
+    }
+
+    private static void startConsoleThread(Channel channel) {
+        new Thread(() -> {
+            while (!Thread.interrupted()) {
+                if (LoginUtil.hasLogin(channel)) {
+                    System.out.println("输入要发送给服务器端的消息：");
+                    Scanner sc = new Scanner(System.in);
+                    String line = sc.nextLine();
+
+                    MessageRequestPacket requestPacket = new MessageRequestPacket();
+                    requestPacket.setMessage(line);
+                    ByteBuf byteBuf = PacketCodec.INSTANCE.encode(channel.alloc(), requestPacket);
+                    channel.writeAndFlush(byteBuf);
+                }
+            }
+        }).start();
     }
 
     public static void main(String[] args) {

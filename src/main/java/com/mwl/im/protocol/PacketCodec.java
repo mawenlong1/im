@@ -2,7 +2,9 @@ package com.mwl.im.protocol;
 
 import com.mwl.im.protocol.command.Command;
 import com.mwl.im.protocol.request.LoginRequestPacket;
+import com.mwl.im.protocol.request.MessageRequestPacket;
 import com.mwl.im.protocol.response.LoginResponsePacket;
+import com.mwl.im.protocol.response.MessageResponsePacket;
 import com.mwl.im.serialize.Serializer;
 import com.mwl.im.serialize.SerializerAlgorithm;
 import com.mwl.im.serialize.impl.JSONSerializer;
@@ -27,6 +29,9 @@ public class PacketCodec {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(Command.LOGIN_REQUEST, LoginRequestPacket.class);
         packetTypeMap.put(Command.LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetTypeMap.put(Command.MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetTypeMap.put(Command.MESSAGE_RESPONSE, MessageResponsePacket.class);
+
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
