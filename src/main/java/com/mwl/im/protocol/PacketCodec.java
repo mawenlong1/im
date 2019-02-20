@@ -2,6 +2,7 @@ package com.mwl.im.protocol;
 
 import com.mwl.im.protocol.command.Command;
 import com.mwl.im.protocol.request.CreateGroupRequestPacket;
+import com.mwl.im.protocol.request.GroupMessageRequestPacket;
 import com.mwl.im.protocol.request.JoinGroupRequestPacket;
 import com.mwl.im.protocol.request.ListGroupMembersRequestPacket;
 import com.mwl.im.protocol.request.LoginRequestPacket;
@@ -9,6 +10,7 @@ import com.mwl.im.protocol.request.LogoutRequestPacket;
 import com.mwl.im.protocol.request.MessageRequestPacket;
 import com.mwl.im.protocol.request.QuitGroupRequestPacket;
 import com.mwl.im.protocol.response.CreateGroupResponsePacket;
+import com.mwl.im.protocol.response.GroupMessageResponsePacket;
 import com.mwl.im.protocol.response.JoinGroupResponsePacket;
 import com.mwl.im.protocol.response.ListGroupMembersResponsePacket;
 import com.mwl.im.protocol.response.LoginResponsePacket;
@@ -50,6 +52,8 @@ public class PacketCodec {
         packetTypeMap.put(Command.QUIT_GROUP_RESPONSE, QuitGroupResponsePacket.class);
         packetTypeMap.put(Command.LIST_GROUP_MEMBERS_REQUEST, ListGroupMembersRequestPacket.class);
         packetTypeMap.put(Command.LIST_GROUP_MEMBERS_RESPONSE, ListGroupMembersResponsePacket.class);
+        packetTypeMap.put(Command.GROUP_MESSAGE_REQUEST, GroupMessageRequestPacket.class);
+        packetTypeMap.put(Command.GROUP_MESSAGE_RESPONSE, GroupMessageResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();

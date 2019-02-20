@@ -5,6 +5,7 @@ import com.mwl.im.codec.PacketEncoder;
 import com.mwl.im.codec.Spliter;
 import com.mwl.im.server.handler.AuthHandler;
 import com.mwl.im.server.handler.CreateGroupRequestHandler;
+import com.mwl.im.server.handler.GroupMessageRequestHandler;
 import com.mwl.im.server.handler.JoinGroupRequestHandler;
 import com.mwl.im.server.handler.ListGroupMembersRequestHandler;
 import com.mwl.im.server.handler.LoginRequestHandler;
@@ -55,7 +56,7 @@ public class Server {
                    .addLast(new PacketDecoder())
                    //登录
                    .addLast(new LoginRequestHandler())
-                   //添加用户认证
+                   //添加用户 认证
                    .addLast(new AuthHandler())
                    //创建群聊
                    .addLast(new CreateGroupRequestHandler())
@@ -65,6 +66,8 @@ public class Server {
                    .addLast(new ListGroupMembersRequestHandler())
                    //退出群聊
                    .addLast(new QuitGroupRequestHandler())
+                   //发送群聊消息
+                   .addLast(new GroupMessageRequestHandler())
                    //登出
                    .addLast(new LogoutRequestHandler())
                    //单聊
