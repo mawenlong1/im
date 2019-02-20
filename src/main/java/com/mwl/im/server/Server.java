@@ -1,16 +1,12 @@
 package com.mwl.im.server;
 
-import com.mwl.im.codec.PacketDecoder;
-import com.mwl.im.codec.PacketEncoder;
+import com.mwl.im.codec.PacketCodecHandler;
 import com.mwl.im.codec.Spliter;
+import com.mwl.im.handler.IMIdleStateHandler;
 import com.mwl.im.server.handler.AuthHandler;
-import com.mwl.im.server.handler.CreateGroupRequestHandler;
-import com.mwl.im.server.handler.JoinGroupRequestHandler;
-import com.mwl.im.server.handler.ListGroupMembersRequestHandler;
+import com.mwl.im.server.handler.HeartBeatRequestHandler;
+import com.mwl.im.server.handler.IMHandler;
 import com.mwl.im.server.handler.LoginRequestHandler;
-import com.mwl.im.server.handler.LogoutRequestHandler;
-import com.mwl.im.server.handler.MessageRequestHandler;
-import com.mwl.im.server.handler.QuitGroupRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -50,27 +46,19 @@ public class Server {
              @Override
              protected void initChannel(NioSocketChannel ch) throws Exception {
                  ch.pipeline()
+                   //心跳检测
+                   .addLast(new IMIdleStateHandler())
+                   //会累积当前channel读到的数据,所以不能使用单例
                    .addLast(new Spliter())
                    //解码信息
-                   .addLast(new PacketDecoder())
+                   .addLast(PacketCodecHandler.INSTANCE)
+                   //心跳检测
+                   .addLast(HeartBeatRequestHandler.INSTANCE)
                    //登录
-                   .addLast(new LoginRequestHandler())
-                   //添加用户认证
-                   .addLast(new AuthHandler())
-                   //创建群聊
-                   .addLast(new CreateGroupRequestHandler())
-                   //群聊加入
-                   .addLast(new JoinGroupRequestHandler())
-                   //获取群聊成员
-                   .addLast(new ListGroupMembersRequestHandler())
-                   //退出群聊
-                   .addLast(new QuitGroupRequestHandler())
-                   //登出
-                   .addLast(new LogoutRequestHandler())
-                   //单聊
-                   .addLast(new MessageRequestHandler())
-                   //编码发送信息
-                   .addLast(new PacketEncoder());
+                   .addLast(LoginRequestHandler.INSTANCE)
+                   //认证
+                   .addLast(AuthHandler.INSTANCE)
+                   .addLast(IMHandler.INSTANCE);
              }
          });
         bind(b, port);

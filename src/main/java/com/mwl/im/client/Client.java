@@ -3,14 +3,18 @@ package com.mwl.im.client;
 import com.mwl.im.client.console.ConsoleCommandManager;
 import com.mwl.im.client.console.LoginConsoleCommand;
 import com.mwl.im.client.handler.CreateGroupRequestHandler;
+import com.mwl.im.client.handler.GroupMessageResponseHandler;
+import com.mwl.im.client.handler.HeartBeatTimerHandler;
 import com.mwl.im.client.handler.JoinGroupResponseHandler;
 import com.mwl.im.client.handler.ListGroupMembersResponseHandler;
 import com.mwl.im.client.handler.LoginReponseHandler;
+import com.mwl.im.client.handler.LogoutResponseHandler;
 import com.mwl.im.client.handler.MessageResponseHandler;
 import com.mwl.im.client.handler.QuitGroupResponseHandler;
 import com.mwl.im.codec.PacketDecoder;
 import com.mwl.im.codec.PacketEncoder;
 import com.mwl.im.codec.Spliter;
+import com.mwl.im.handler.IMIdleStateHandler;
 import com.mwl.im.utils.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -54,6 +58,8 @@ public class Client {
              @Override
              protected void initChannel(SocketChannel ch) throws Exception {
                  ch.pipeline()
+                   //空闲检测
+                   .addLast(new IMIdleStateHandler())
                    .addLast(new Spliter())
                    //解码
                    .addLast(new PacketDecoder())
@@ -69,8 +75,14 @@ public class Client {
                    .addLast(new QuitGroupResponseHandler())
                    //单聊
                    .addLast(new MessageResponseHandler())
+                   //群聊消息
+                   .addLast(new GroupMessageResponseHandler())
+                   //登出
+                   .addLast(new LogoutResponseHandler())
                    // 编码
-                   .addLast(new PacketEncoder());
+                   .addLast(new PacketEncoder())
+                   //定时发送消息
+                   .addLast(new HeartBeatTimerHandler());
              }
          });
         connect(b, host, port, MAX_RETRY);
