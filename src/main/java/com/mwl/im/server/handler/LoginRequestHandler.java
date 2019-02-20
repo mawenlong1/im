@@ -25,7 +25,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
 
         if (valid(ctx, msg)) {
             responsePacket.setSuccess(true);
-//            String userId = rendomUserId();
+           // String userId = rendomUserId();
             String userId = msg.getUserName();
             responsePacket.setUserId(userId);
             SessionUtil.bindSession(new Session(userId, msg.getUserName()), ctx.channel());

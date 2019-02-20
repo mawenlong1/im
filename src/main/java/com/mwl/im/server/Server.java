@@ -2,7 +2,9 @@ package com.mwl.im.server;
 
 import com.mwl.im.codec.PacketDecoder;
 import com.mwl.im.codec.PacketEncoder;
+import com.mwl.im.codec.Spliter;
 import com.mwl.im.server.handler.AuthHandler;
+import com.mwl.im.server.handler.CreateGroupRequestHandler;
 import com.mwl.im.server.handler.LoginRequestHandler;
 import com.mwl.im.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -44,11 +46,18 @@ public class Server {
              @Override
              protected void initChannel(NioSocketChannel ch) throws Exception {
                  ch.pipeline()
+                   .addLast(new Spliter())
+                   //解码信息
                    .addLast(new PacketDecoder())
+                   //登录
                    .addLast(new LoginRequestHandler())
                    //添加用户认证
                    .addLast(new AuthHandler())
+                   //群聊加入
+                   .addLast(new CreateGroupRequestHandler())
+                   //单聊
                    .addLast(new MessageRequestHandler())
+                   //编码发送信息
                    .addLast(new PacketEncoder());
              }
          });

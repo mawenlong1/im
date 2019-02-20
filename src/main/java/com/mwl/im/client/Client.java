@@ -1,12 +1,13 @@
 package com.mwl.im.client;
 
+import com.mwl.im.client.console.ConsoleCommandManager;
+import com.mwl.im.client.console.LoginConsoleCommand;
+import com.mwl.im.client.handler.CreateGroupRequestHandler;
 import com.mwl.im.client.handler.LoginReponseHandler;
 import com.mwl.im.client.handler.MessageResponseHandler;
 import com.mwl.im.codec.PacketDecoder;
 import com.mwl.im.codec.PacketEncoder;
 import com.mwl.im.codec.Spliter;
-import com.mwl.im.protocol.request.LoginRequestPacket;
-import com.mwl.im.protocol.request.MessageRequestPacket;
 import com.mwl.im.utils.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -51,9 +52,15 @@ public class Client {
              protected void initChannel(SocketChannel ch) throws Exception {
                  ch.pipeline()
                    .addLast(new Spliter())
+                   //解码
                    .addLast(new PacketDecoder())
+                   //登录
                    .addLast(new LoginReponseHandler())
+                   //创建群聊
+                   .addLast(new CreateGroupRequestHandler())
+                   //单聊
                    .addLast(new MessageResponseHandler())
+                   // 编码
                    .addLast(new PacketEncoder());
              }
          });
@@ -65,7 +72,7 @@ public class Client {
             if (future.isSuccess()) {
                 log.info("连接成功!");
                 Channel channel = ((ChannelFuture) future).channel();
-                startConsoleThread(channel);
+                startConsolThread(channel);
             } else if (retry == 0) {
                 log.info("重试次数已用完，放弃连接！");
             } else {
@@ -80,39 +87,20 @@ public class Client {
         });
     }
 
-    private static void startConsoleThread(Channel channel) {
-        Scanner sc = new Scanner(System.in);
-        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+    private static void startConsolThread(Channel channel) {
+        ConsoleCommandManager manager = new ConsoleCommandManager();
+        LoginConsoleCommand loginConsoleCommand = new LoginConsoleCommand();
 
+        Scanner scanner = new Scanner(System.in);
         new Thread(() -> {
             while (!Thread.interrupted()) {
-                if (!SessionUtil.hasLogin(channel)) {
-                    System.out.print("输入用户名登录: ");
-                    String username = sc.nextLine();
-                    loginRequestPacket.setUserName(username);
-
-                    // 密码使用默认的
-                    loginRequestPacket.setPassword("pwd");
-
-                    // 发送登录数据包
-                    channel.writeAndFlush(loginRequestPacket);
-                    waitForLoginResponse();
+                if (SessionUtil.hasLogin(channel)) {
+                    manager.exec(scanner, channel);
                 } else {
-                    System.out.print("输入发送人的userId: ");
-                    String toUserId = sc.next();
-                    System.out.print("输入要发送的消息: ");
-                    String message = sc.next();
-                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                    loginConsoleCommand.exec(scanner, channel);
                 }
             }
         }).start();
-    }
-
-    private static void waitForLoginResponse() {
-        try {
-            TimeUnit.MILLISECONDS.sleep(1000);
-        } catch (InterruptedException ignored) {
-        }
     }
 
     public static void main(String[] args) {
