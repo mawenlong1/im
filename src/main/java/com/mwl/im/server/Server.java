@@ -5,6 +5,7 @@ import com.mwl.im.codec.PacketEncoder;
 import com.mwl.im.codec.Spliter;
 import com.mwl.im.server.handler.AuthHandler;
 import com.mwl.im.server.handler.CreateGroupRequestHandler;
+import com.mwl.im.server.handler.JoinGroupRequestHandler;
 import com.mwl.im.server.handler.LoginRequestHandler;
 import com.mwl.im.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -53,8 +54,10 @@ public class Server {
                    .addLast(new LoginRequestHandler())
                    //添加用户认证
                    .addLast(new AuthHandler())
-                   //群聊加入
+                   //创建群聊
                    .addLast(new CreateGroupRequestHandler())
+                   //群聊加入
+                   .addLast(new JoinGroupRequestHandler())
                    //单聊
                    .addLast(new MessageRequestHandler())
                    //编码发送信息

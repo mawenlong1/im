@@ -1,6 +1,7 @@
 package com.mwl.im.client;
 
 import com.mwl.im.client.console.ConsoleCommandManager;
+import com.mwl.im.client.console.JoinGroupConsoleCommand;
 import com.mwl.im.client.console.LoginConsoleCommand;
 import com.mwl.im.client.handler.CreateGroupRequestHandler;
 import com.mwl.im.client.handler.LoginReponseHandler;

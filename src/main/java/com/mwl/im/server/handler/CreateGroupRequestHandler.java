@@ -35,13 +35,16 @@ public class CreateGroupRequestHandler
             }
         }
 
+        String groupId = IDUtil.randomId();
         CreateGroupResponsePacket responsePacket = new CreateGroupResponsePacket();
         responsePacket.setSuccess(true);
-        responsePacket.setGroupId(IDUtil.randomInt().toString());
+        responsePacket.setGroupId(groupId);
         responsePacket.setUserNameList(userNames);
 
         channels.writeAndFlush(responsePacket);
-        System.out.print("群创建成功，id 为[" + responsePacket.getGroupId() + "], ");
+        System.out.print("群创建成功，id 为[" + groupId + "], ");
         System.out.println("群里面有：" + responsePacket.getUserNameList());
+
+        SessionUtil.bindChannelGroup(groupId, channels);
     }
 }
