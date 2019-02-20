@@ -1,12 +1,14 @@
 package com.mwl.im.session;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author mawenlong
  * @date 2019-02-19 22:23
  */
 @Data
+@NoArgsConstructor
 public class Session {
     private String userId;
     private String userName;

@@ -2,12 +2,19 @@ package com.mwl.im.protocol;
 
 import com.mwl.im.protocol.command.Command;
 import com.mwl.im.protocol.request.CreateGroupRequestPacket;
+import com.mwl.im.protocol.request.JoinGroupRequestPacket;
+import com.mwl.im.protocol.request.ListGroupMembersRequestPacket;
 import com.mwl.im.protocol.request.LoginRequestPacket;
 import com.mwl.im.protocol.request.LogoutRequestPacket;
 import com.mwl.im.protocol.request.MessageRequestPacket;
+import com.mwl.im.protocol.request.QuitGroupRequestPacket;
 import com.mwl.im.protocol.response.CreateGroupResponsePacket;
+import com.mwl.im.protocol.response.JoinGroupResponsePacket;
+import com.mwl.im.protocol.response.ListGroupMembersResponsePacket;
 import com.mwl.im.protocol.response.LoginResponsePacket;
+import com.mwl.im.protocol.response.LogoutResponsePacket;
 import com.mwl.im.protocol.response.MessageResponsePacket;
+import com.mwl.im.protocol.response.QuitGroupResponsePacket;
 import com.mwl.im.serialize.Serializer;
 import com.mwl.im.serialize.SerializerAlgorithm;
 import com.mwl.im.serialize.impl.JSONSerializer;
@@ -34,9 +41,15 @@ public class PacketCodec {
         packetTypeMap.put(Command.MESSAGE_REQUEST, MessageRequestPacket.class);
         packetTypeMap.put(Command.MESSAGE_RESPONSE, MessageResponsePacket.class);
         packetTypeMap.put(Command.LOGOUT_REQUEST, LogoutRequestPacket.class);
-        // packetTypeMap.put(Command.LOGOUT_RESPONSE, LogoutResponsePacket.class);
+        packetTypeMap.put(Command.LOGOUT_RESPONSE, LogoutResponsePacket.class);
         packetTypeMap.put(Command.CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
         packetTypeMap.put(Command.CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
+        packetTypeMap.put(Command.JOIN_GROUP_REQUEST, JoinGroupRequestPacket.class);
+        packetTypeMap.put(Command.JOIN_GROUP_RESPONSE, JoinGroupResponsePacket.class);
+        packetTypeMap.put(Command.QUIT_GROUP_REQUEST, QuitGroupRequestPacket.class);
+        packetTypeMap.put(Command.QUIT_GROUP_RESPONSE, QuitGroupResponsePacket.class);
+        packetTypeMap.put(Command.LIST_GROUP_MEMBERS_REQUEST, ListGroupMembersRequestPacket.class);
+        packetTypeMap.put(Command.LIST_GROUP_MEMBERS_RESPONSE, ListGroupMembersResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();

@@ -1,11 +1,13 @@
 package com.mwl.im.client;
 
 import com.mwl.im.client.console.ConsoleCommandManager;
-import com.mwl.im.client.console.JoinGroupConsoleCommand;
 import com.mwl.im.client.console.LoginConsoleCommand;
 import com.mwl.im.client.handler.CreateGroupRequestHandler;
+import com.mwl.im.client.handler.JoinGroupResponseHandler;
+import com.mwl.im.client.handler.ListGroupMembersResponseHandler;
 import com.mwl.im.client.handler.LoginReponseHandler;
 import com.mwl.im.client.handler.MessageResponseHandler;
+import com.mwl.im.client.handler.QuitGroupResponseHandler;
 import com.mwl.im.codec.PacketDecoder;
 import com.mwl.im.codec.PacketEncoder;
 import com.mwl.im.codec.Spliter;
@@ -59,6 +61,12 @@ public class Client {
                    .addLast(new LoginReponseHandler())
                    //创建群聊
                    .addLast(new CreateGroupRequestHandler())
+                   //输出群聊成员
+                   .addLast(new ListGroupMembersResponseHandler())
+                   //加入群聊
+                   .addLast(new JoinGroupResponseHandler())
+                   //退出群聊
+                   .addLast(new QuitGroupResponseHandler())
                    //单聊
                    .addLast(new MessageResponseHandler())
                    // 编码

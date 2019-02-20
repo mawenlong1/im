@@ -35,7 +35,7 @@ public class CreateGroupRequestHandler
             }
         }
 
-        String groupId = IDUtil.randomId();
+        String groupId = IDUtil.randomInt().toString();
         CreateGroupResponsePacket responsePacket = new CreateGroupResponsePacket();
         responsePacket.setSuccess(true);
         responsePacket.setGroupId(groupId);
