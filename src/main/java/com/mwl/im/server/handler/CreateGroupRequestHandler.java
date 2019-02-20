@@ -5,6 +5,7 @@ import com.mwl.im.protocol.response.CreateGroupResponsePacket;
 import com.mwl.im.utils.IDUtil;
 import com.mwl.im.utils.SessionUtil;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -17,8 +18,12 @@ import java.util.List;
  * @author mawenlong
  * @date 2019/02/20
  */
+@Sharable
 public class CreateGroupRequestHandler
         extends SimpleChannelInboundHandler<CreateGroupRequestPacket> {
+
+    public static final CreateGroupRequestHandler INSTANCE = new CreateGroupRequestHandler();
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, CreateGroupRequestPacket msg)
             throws Exception {

@@ -5,6 +5,7 @@ import com.mwl.im.protocol.response.MessageResponsePacket;
 import com.mwl.im.session.Session;
 import com.mwl.im.utils.SessionUtil;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,10 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2019-02-19 20:48
  */
 @Slf4j
+@Sharable
 public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRequestPacket> {
+
+    public static final MessageRequestHandler INSTANCE = new MessageRequestHandler();
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageRequestPacket msg) throws Exception {
