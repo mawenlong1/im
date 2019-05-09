@@ -53,7 +53,8 @@ public class PacketCodec {
         packetTypeMap.put(Command.QUIT_GROUP_REQUEST, QuitGroupRequestPacket.class);
         packetTypeMap.put(Command.QUIT_GROUP_RESPONSE, QuitGroupResponsePacket.class);
         packetTypeMap.put(Command.LIST_GROUP_MEMBERS_REQUEST, ListGroupMembersRequestPacket.class);
-        packetTypeMap.put(Command.LIST_GROUP_MEMBERS_RESPONSE, ListGroupMembersResponsePacket.class);
+        packetTypeMap
+                .put(Command.LIST_GROUP_MEMBERS_RESPONSE, ListGroupMembersResponsePacket.class);
         packetTypeMap.put(Command.GROUP_MESSAGE_REQUEST, GroupMessageRequestPacket.class);
         packetTypeMap.put(Command.GROUP_MESSAGE_RESPONSE, GroupMessageResponsePacket.class);
         packetTypeMap.put(Command.HEARTBEAT_REQUEST, HeartBeatRequestPacket.class);
@@ -76,12 +77,17 @@ public class PacketCodec {
         // TODO buffer与ioBuffer区别
 //        ByteBuf byteBuf = allocator.buffer();
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
-
+        //魔术
         byteBuf.writeInt(MAGIC_NUMBER);
+        //版本
         byteBuf.writeByte(packet.getVersion());
+        //序列化算法
         byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlogrithm());
+        //命令
         byteBuf.writeByte(packet.getCommand());
+        //长度
         byteBuf.writeInt(bytes.length);
+        //数据
         byteBuf.writeBytes(bytes);
         return byteBuf;
     }
@@ -94,13 +100,17 @@ public class PacketCodec {
      * @return
      */
     public Packet decode(ByteBuf byteBuf) {
+        //跳过魔术
         byteBuf.skipBytes(4);
+        //跳过版本号
         byteBuf.skipBytes(1);
-
+        //序列化算法
         byte serializeAlgorithm = byteBuf.readByte();
+        //命令
         byte command = byteBuf.readByte();
+        //数据长度
         int length = byteBuf.readInt();
-
+        //数据
         byte[] bytes = new byte[length];
         byteBuf.readBytes(bytes);
 
