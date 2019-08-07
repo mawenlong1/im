@@ -16,17 +16,25 @@ public class ConsoleCommandManager implements ConsoleCommand {
 
     public ConsoleCommandManager() {
         consoleCommandMap = new HashMap<>();
-        consoleCommandMap.put("sendToUser", new SendToUserConsoleCommand());
-        consoleCommandMap.put("logout", new LogoutConsoleCommand());
-        consoleCommandMap.put("createGroup", new CreateGroupConsoleCommand());
-        consoleCommandMap.put("joinGroup", new JoinGroupConsoleCommand());
-        consoleCommandMap.put("quitGroup", new QuitGroupConsoleCommand());
-        consoleCommandMap.put("listGroupMembers", new ListGroupMembersConsoleCommand());
-        consoleCommandMap.put("sendToGroup", new SendToGroupConsoleCommand());
+        consoleCommandMap.put("1", new SendToUserConsoleCommand());
+        consoleCommandMap.put("2", new LogoutConsoleCommand());
+        consoleCommandMap.put("3", new CreateGroupConsoleCommand());
+        consoleCommandMap.put("4", new JoinGroupConsoleCommand());
+        consoleCommandMap.put("5", new QuitGroupConsoleCommand());
+        consoleCommandMap.put("6", new ListGroupMembersConsoleCommand());
+        consoleCommandMap.put("7", new SendToGroupConsoleCommand());
     }
 
     @Override
     public void exec(Scanner scanner, Channel channel) {
+        System.out.print("1.sendToUser\n" +
+                           "2.logout\n" +
+                           "3.createGroup\n" +
+                           "4.joinGroup\n" +
+                           "5.quitGroup\n" +
+                           "6.listGroupMembers\n" +
+                           "7.sendToGroup\n" +
+                           "请输入命令：");
         String command = scanner.next();
         ConsoleCommand consoleCommand = consoleCommandMap.get(command);
         if (consoleCommand != null) {
