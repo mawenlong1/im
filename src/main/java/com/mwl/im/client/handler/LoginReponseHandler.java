@@ -19,12 +19,12 @@ public class LoginReponseHandler extends SimpleChannelInboundHandler<LoginRespon
         String userId = msg.getUserId();
         String userName = msg.getUserName();
         if (msg.isSuccess()) {
-            System.out.println("[" + userName + "]登录成功，userId 为: " + msg.getUserId());
+            System.out.println('[' + userName + "]登录成功，userId 为: " + msg.getUserId());
 
             SessionUtil.bindSession(new Session(userId, userName), ctx.channel());
             ctx.pipeline().remove(this);
         } else {
-            System.out.println("[" + userName + "]登录失败，原因：" + msg.getReason());
+            System.out.println('[' + userName + "]登录失败，原因：" + msg.getReason());
         }
     }
 
