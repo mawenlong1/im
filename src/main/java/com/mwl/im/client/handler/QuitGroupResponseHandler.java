@@ -12,9 +12,9 @@ public class QuitGroupResponseHandler extends SimpleChannelInboundHandler<QuitGr
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, QuitGroupResponsePacket msg) throws Exception {
         if (msg.isSuccess()) {
-            System.out.println("退出群聊[" + msg.getGroupId() + "]成功！");
+            System.out.println("退出群聊[ " + msg.getGroupId() + " ]成功！");
         } else {
-            System.out.println("退出群聊[" + msg.getGroupId() + "]失败！");
+            System.out.println("退出群聊[ " + msg.getGroupId() + " ]失败！");
         }
     }
 }
