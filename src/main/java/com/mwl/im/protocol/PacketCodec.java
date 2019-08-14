@@ -74,8 +74,6 @@ public class PacketCodec {
      * @return
      */
     public ByteBuf encode(ByteBuf byteBuf, Packet packet) {
-        // TODO buffer与ioBuffer区别
-//        ByteBuf byteBuf = allocator.buffer();
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
         //魔术
         byteBuf.writeInt(MAGIC_NUMBER);
