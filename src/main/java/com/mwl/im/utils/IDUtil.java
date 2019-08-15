@@ -7,7 +7,7 @@ import java.util.UUID;
  * @date 2019/02/20
  */
 public class IDUtil {
-    //TODO 暂时使用
+
     public static Integer count = 0;
 
     public static String randomId() {
