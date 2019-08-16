@@ -1,6 +1,7 @@
 package com.mwl.im.utils;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author mawenlong
@@ -8,14 +9,14 @@ import java.util.UUID;
  */
 public class IDUtil {
 
-    public static Integer count = 0;
+    public static AtomicInteger count = new AtomicInteger(0);
 
     public static String randomId() {
         return UUID.randomUUID().toString().split("-")[0];
     }
 
     public static Integer randomInt() {
-        return count++;
+        return count.getAndIncrement();
     }
 
 }
