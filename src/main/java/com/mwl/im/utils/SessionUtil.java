@@ -16,8 +16,7 @@ public class SessionUtil {
     // userId与Channel的映射
     private static final Map<String, Channel> userIdChannelMap = new ConcurrentHashMap<>();
 
-    private static final Map<String, ChannelGroup> groupIdChannelGroupMap =
-            new ConcurrentHashMap<>();
+    private static final Map<String, ChannelGroup> groupIdChannelGroupMap = new ConcurrentHashMap<>();
 
     public static void bindSession(Session session, Channel channel) {
         userIdChannelMap.put(session.getUserId(), channel);
