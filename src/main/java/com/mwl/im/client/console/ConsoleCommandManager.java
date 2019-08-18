@@ -34,7 +34,7 @@ public class ConsoleCommandManager implements ConsoleCommand {
                            "5.quitGroup\n" +
                            "6.listGroupMembers\n" +
                            "7.sendToGroup\n" +
-                           "请输入命令：");
+                           " 请输入命令：");
         String command = scanner.next();
         ConsoleCommand consoleCommand = consoleCommandMap.get(command);
         if (consoleCommand != null) {
