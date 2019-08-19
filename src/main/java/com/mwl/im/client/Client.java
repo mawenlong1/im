@@ -100,7 +100,7 @@ public class Client {
                 int order = (MAX_RETRY - retry) + 1;
                 //本次重连间隔
                 int delay = 1 << order;
-                log.info("连接失败，第" + order + "次重连……");
+                log.info("连接失败，第" + order + "次重连...");
                 bootstrap.config().group()
                          .schedule(() -> connect(bootstrap, host, port, retry - 1), delay,
                                    TimeUnit.SECONDS);
