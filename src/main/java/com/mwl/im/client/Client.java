@@ -53,7 +53,7 @@ public class Client {
          .option(ChannelOption.SO_KEEPALIVE, true)
          // 表示是否开始Nagle算法，true 表示关闭，false 表示开启，通俗地说，如果要求高实时性，有数据发送时就马上发送，就设置为 true 关闭，如果需要减少发送次数减少网络交互，就设置为 false 开启
          .option(ChannelOption.TCP_NODELAY, true)
-         .attr(AttributeKey.newInstance("clientName"), "IM Client")
+         .attr(AttributeKey.newInstance("clientName"), "IM Client。")
          .handler(new ChannelInitializer<SocketChannel>() {
              @Override
              protected void initChannel(SocketChannel ch) throws Exception {
