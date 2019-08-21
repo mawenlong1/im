@@ -95,7 +95,7 @@ public class Client {
                 Channel channel = ((ChannelFuture) future).channel();
                 startConsolThread(channel);
             } else if (retry == 0) {
-                log.info("重试次数已用完，放弃连接！");
+                log.info("重试次数已用完，放弃连接！！！");
             } else {
                 int order = (MAX_RETRY - retry) + 1;
                 //本次重连间隔
