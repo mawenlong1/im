@@ -14,7 +14,7 @@ public class CreateGroupRequestHandler
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, CreateGroupResponsePacket msg)
             throws Exception {
-        System.out.print("群创建成功，id 为[" + msg.getGroupId() + "], ");
-        System.out.println("群里面有：" + msg.getUserNameList());
+        System.out.print("群创建成功，id为[" + msg.getGroupId() + "],");
+        System.out.println("群成员有：" + msg.getUserNameList());
     }
 }
