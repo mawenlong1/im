@@ -16,7 +16,7 @@ public class JoinGroupResponseHandler extends SimpleChannelInboundHandler<JoinGr
             System.out.println("加入群[" + msg.getGroupId() + "]成功!");
         } else {
             System.err.println(
-                    "加入群[" + msg.getGroupId() + "]失败，原因为：" + msg.getReason() + "。");
+                    "加入群[" + msg.getGroupId() + "]失败，原因：" + msg.getReason() + "。");
         }
     }
 }
