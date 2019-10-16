@@ -21,7 +21,6 @@ public class IMHandler extends SimpleChannelInboundHandler<Packet> {
 
     private IMHandler() {
         handlerMap = new HashMap<>();
-
         //这些handler每次有数据的时候只可能有一个执行或都不执行
         //单聊
         handlerMap.put(Command.MESSAGE_REQUEST, MessageRequestHandler.INSTANCE);

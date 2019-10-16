@@ -9,8 +9,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.UUID;
-
 /**
  * @author mawenlong
  * @date 2019-02-19 20:43
@@ -33,7 +31,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             String userId = msg.getUserName();
             responsePacket.setUserId(userId);
             SessionUtil.bindSession(new Session(userId, msg.getUserName()), ctx.channel());
-            log.info("[" + msg.getUserName() + "]登录成功");
+            log.info('[' + msg.getUserName() + "]登录成功");
         } else {
             responsePacket.setSuccess(false);
             responsePacket.setReason("账户校验失败。。。");
