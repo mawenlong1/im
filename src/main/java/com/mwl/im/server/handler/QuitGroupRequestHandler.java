@@ -23,7 +23,6 @@ public class QuitGroupRequestHandler extends SimpleChannelInboundHandler<QuitGro
         String groupId = msg.getGroupId();
         ChannelGroup channelGroup = SessionUtil.getChannelGroup(groupId);
         channelGroup.remove(ctx.channel());
-
         QuitGroupResponsePacket responsePacket = new QuitGroupResponsePacket();
         responsePacket.setGroupId(groupId);
         responsePacket.setSuccess(true);

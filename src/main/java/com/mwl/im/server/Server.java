@@ -38,7 +38,8 @@ public class Server {
          .option(ChannelOption.SO_BACKLOG, 1024)
          //表示是否开启TCP底层心跳机制，true为开启
          .childOption(ChannelOption.SO_KEEPALIVE, true)
-         // 表示是否开启Nagle算法，true表示关闭，false表示开启，通俗地说，如果要求高实时性，有数据发送时就马上发送，就关闭，如果需要减少发送次数减少网络交互，就开启。
+         // 表示是否开启Nagle算法，true表示关闭，false表示开启，
+         // 通俗地说，如果要求高实时性，有数据发送时就马上发送，就关闭，如果需要减少发送次数减少网络交互，就开启。
          .childOption(ChannelOption.TCP_NODELAY, true)
          .handler(new LoggingHandler(LogLevel.INFO))
          .attr(AttributeKey.newInstance("serverName"), "IM Server")
