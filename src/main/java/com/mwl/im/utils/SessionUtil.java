@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2019-02-19 22:25
  */
 public class SessionUtil {
-    // userId与Channel的映射
+
     private static final Map<String, Channel> userIdChannelMap = new ConcurrentHashMap<>();
 
     private static final Map<String, ChannelGroup> groupIdChannelGroupMap = new ConcurrentHashMap<>();
