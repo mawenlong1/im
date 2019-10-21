@@ -22,7 +22,7 @@ public class IMIdleStateHandler extends IdleStateHandler {
 
     @Override
     protected void channelIdle(ChannelHandlerContext ctx, IdleStateEvent evt) {
-        log.info(READER_IDLE_TIME + "秒内未读到数据，关闭连接。");
+        log.info(READER_IDLE_TIME + "内未读到数据，关闭连接。");
         ctx.channel().close();
     }
 }
